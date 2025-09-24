@@ -13,10 +13,17 @@ func NewTransactionService(r *repository.TransactionRepository) *TransactionServ
 	return &TransactionService{repo: r}
 }
 
+// Create - cria uma transação
 func (s *TransactionService) Create(tx *domain.Transaction) error {
+	// regra de negócio poderia entrar aqui (ex: validar valores negativos, etc.)
 	return s.repo.Create(tx)
 }
 
 func (s *TransactionService) List() ([]domain.Transaction, error) {
 	return s.repo.List()
+}
+
+// ListByUser - lista transações de um usuário
+func (s *TransactionService) ListByUser(userID uint) ([]domain.Transaction, error) {
+	return s.repo.ListByUser(userID)
 }

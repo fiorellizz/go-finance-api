@@ -3,9 +3,9 @@ package handler
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
 	"github.com/fiorellizz/go-finance-api/internal/domain"
 	"github.com/fiorellizz/go-finance-api/internal/service"
+	"github.com/gin-gonic/gin"
 )
 
 type TransactionHandler struct {
@@ -37,4 +37,20 @@ func (h *TransactionHandler) List(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusOK, transactions)
+}
+
+func (h *TransactionHandler) ListByUser(c *gin.Context) {
+    userID, exists := c.Get("userID") // vem do middleware JWT
+    if !exists {
+        c.JSON(401, gin.H{"error": "unauthorized"})
+        return
+    }
+
+    transactions, err := h.svc.ListByUser(userID.(uint))
+    if err != nil {
+        c.JSON(500, gin.H{"error": "failed to fetch transactions"})
+        return
+    }
+
+    c.JSON(200, transactions)
 }

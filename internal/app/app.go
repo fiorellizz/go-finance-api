@@ -9,23 +9,22 @@ import (
 
 type Application struct {
 	TransactionHandler *handler.TransactionHandler
-	//  UserHandler        *handler.UserHandler
+	UserHandler        *handler.UserHandler
 }
 
 func New(db *gorm.DB) *Application {
-	
 	// Transaction
-	repo := repository.NewTransactionRepository(db)
-	svc := service.NewTransactionService(repo)
-	th := handler.NewTransactionHandler(svc)
+	transactionRepo := repository.NewTransactionRepository(db)
+	transactionSvc := service.NewTransactionService(transactionRepo)
+	th := handler.NewTransactionHandler(transactionSvc)
 
 	// User
-	// userRepo := repository.NewUserRepository(db)
-	// userSvc := service.NewUserService(userRepo)
-	// uh := handler.NewUserHandler(userSvc)
+	userRepo := repository.NewUserRepository(db)
+	userSvc := service.NewUserService(userRepo)
+	uh := handler.NewUserHandler(userSvc)
 
 	return &Application{
 		TransactionHandler: th,
-		// UserHandler:        uh,
+		UserHandler:        uh,
 	}
 }

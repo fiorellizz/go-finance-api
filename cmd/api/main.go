@@ -40,7 +40,7 @@ func main() {
 	}
 
 	// AutoMigrate (somente em dev)
-	db.AutoMigrate(&domain.Transaction{})
+	db.AutoMigrate(&domain.User{}, &domain.Transaction{})
 
 	// Inicializa a aplicação (DI centralizado || injeção de dependecia)
 	application := app.New(db)
@@ -49,11 +49,8 @@ func main() {
 	r := gin.New()
 	r.Use(gin.Recovery())
 
-	// Rotas de Transaction
-	router.SetupTransactionRoutes(r, application.TransactionHandler)
-
-	// Rotas de User
-	// router.SetupUserRoutes(r, application.UserHandler)
+	// configura rotas
+	router.SetupRoutes(r, application)
 
 	srv := &http.Server{
 		Addr:    ":" + os.Getenv("PORT"),
