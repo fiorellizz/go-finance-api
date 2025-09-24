@@ -5,7 +5,7 @@ import (
 	"github.com/fiorellizz/go-finance-api/internal/handler"
 )
 
-func SetupRoutes(r *gin.Engine, th *handler.TransactionHandler) {
+func SetupTransactionRoutes(r *gin.Engine, th *handler.TransactionHandler) {
 	r.GET("/ping", func(c *gin.Context) { c.JSON(200, gin.H{"status": "pong"}) })
 
 	api := r.Group("/api")

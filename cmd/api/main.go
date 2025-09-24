@@ -15,11 +15,9 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 
+	"github.com/fiorellizz/go-finance-api/internal/app"
 	"github.com/fiorellizz/go-finance-api/internal/domain"
-	"github.com/fiorellizz/go-finance-api/internal/handler"
-	"github.com/fiorellizz/go-finance-api/internal/repository"
 	"github.com/fiorellizz/go-finance-api/internal/router"
-	"github.com/fiorellizz/go-finance-api/internal/service"
 )
 
 func main() {
@@ -44,15 +42,18 @@ func main() {
 	// AutoMigrate (somente em dev)
 	db.AutoMigrate(&domain.Transaction{})
 
-	// DI
-	repo := repository.NewTransactionRepository(db)
-	svc := service.NewTransactionService(repo)
-	th := handler.NewTransactionHandler(svc)
+	// Inicializa a aplicação (DI centralizado || injeção de dependecia)
+	application := app.New(db)
 
+	// Setup Router
 	r := gin.New()
 	r.Use(gin.Recovery())
 
-	router.SetupRoutes(r, th)
+	// Rotas de Transaction
+	router.SetupTransactionRoutes(r, application.TransactionHandler)
+
+	// Rotas de User
+	// router.SetupUserRoutes(r, application.UserHandler)
 
 	srv := &http.Server{
 		Addr:    ":" + os.Getenv("PORT"),
