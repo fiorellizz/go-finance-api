@@ -33,3 +33,11 @@ func (r *TransactionRepository) ListByUser(userID uint) ([]domain.Transaction, e
 		Find(&transactions).Error
 	return transactions, err
 }
+
+func (r *TransactionRepository) Update(id string, tx *domain.Transaction) error {
+    return r.db.Model(&domain.Transaction{}).Where("id = ?", id).Updates(tx).Error
+}
+
+func (r *TransactionRepository) Delete(id string) error {
+    return r.db.Delete(&domain.Transaction{}, id).Error
+}

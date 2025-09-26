@@ -3,11 +3,10 @@ package domain
 import "time"
 
 type User struct {
-	ID           uint      `json:"id" gorm:"primaryKey"`
-	Name         string    `json:"name" binding:"required"`
-	Email        string    `json:"email" gorm:"unique" binding:"required,email"`
-	PasswordHash string    `json:"-"`
-	CreatedAt    time.Time `json:"created_at"`
-
-	Transactions []Transaction `json:"transactions,omitempty"`
+	ID           uint          `json:"id" gorm:"primaryKey;autoIncrement"`
+	Name         string        `json:"name" gorm:"size:100;not null"`
+	Email        string        `json:"email" gorm:"size:150;uniqueIndex;not null"`
+	PasswordHash string        `json:"-" gorm:"not null"`
+	CreatedAt    time.Time     `json:"created_at" gorm:"autoCreateTime"`
+	Transactions []Transaction `json:"transactions,omitempty" gorm:"constraint:OnDelete:CASCADE;"`
 }

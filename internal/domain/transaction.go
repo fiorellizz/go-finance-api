@@ -3,7 +3,7 @@ package domain
 import "time"
 
 type Transaction struct {
-	ID        uint      `json:"id" gorm:"primaryKey"`
+	ID        uint      `json:"id" gorm:"primaryKey;autoIncrement"`
 	UserID    uint      `json:"user_id" gorm:"not null"`
 	User      User      `json:"-" gorm:"constraint:OnDelete:CASCADE;"`
 

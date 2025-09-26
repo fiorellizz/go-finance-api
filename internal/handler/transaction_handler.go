@@ -17,17 +17,25 @@ func NewTransactionHandler(s *service.TransactionService) *TransactionHandler {
 }
 
 func (h *TransactionHandler) Create(c *gin.Context) {
-	var tx domain.Transaction
-	if err := c.ShouldBindJSON(&tx); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+    var req domain.Transaction
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
 
-	if err := h.svc.Create(&tx); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save transaction"})
-		return
-	}
-	c.JSON(http.StatusCreated, tx)
+    uid, ok := c.Get("userID")
+    if !ok {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+        return
+    }
+    req.UserID = uid.(uint)
+
+    if err := h.svc.Create(&req); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to save transaction"})
+        return
+    }
+
+    c.JSON(http.StatusCreated, req)
 }
 
 func (h *TransactionHandler) List(c *gin.Context) {
@@ -53,4 +61,30 @@ func (h *TransactionHandler) ListByUser(c *gin.Context) {
     }
 
     c.JSON(200, transactions)
+}
+
+func (h *TransactionHandler) Update(c *gin.Context) {
+    var req domain.Transaction
+    if err := c.ShouldBindJSON(&req); err != nil {
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    id := c.Param("id")
+    if err := h.svc.Update(id, &req); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update transaction"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "transaction updated"})
+}
+
+func (h *TransactionHandler) Delete(c *gin.Context) {
+    id := c.Param("id")
+    if err := h.svc.Delete(id); err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to delete transaction"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"message": "transaction deleted"})
 }

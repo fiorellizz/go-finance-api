@@ -27,3 +27,11 @@ func (s *TransactionService) List() ([]domain.Transaction, error) {
 func (s *TransactionService) ListByUser(userID uint) ([]domain.Transaction, error) {
 	return s.repo.ListByUser(userID)
 }
+
+func (s *TransactionService) Update(id string, tx *domain.Transaction) error {
+    return s.repo.Update(id, tx)
+}
+
+func (s *TransactionService) Delete(id string) error {
+    return s.repo.Delete(id)
+}
