@@ -88,3 +88,35 @@ func (h *TransactionHandler) Delete(c *gin.Context) {
 
     c.JSON(http.StatusOK, gin.H{"message": "transaction deleted"})
 }
+
+func (h *TransactionHandler) GetBalance(c *gin.Context) {
+    uid, ok := c.Get("userID")
+    if !ok {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+        return
+    }
+
+    balance, err := h.svc.GetBalance(uid.(uint))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch balance"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"balance": balance})
+}
+
+func (h *TransactionHandler) GetExpensesByCategory(c *gin.Context) {
+    uid, ok := c.Get("userID")
+    if !ok {
+        c.JSON(http.StatusUnauthorized, gin.H{"error": "unauthorized"})
+        return
+    }
+
+    expenses, err := h.svc.GetExpensesByCategory(uid.(uint))
+    if err != nil {
+        c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to fetch expenses by category"})
+        return
+    }
+
+    c.JSON(http.StatusOK, gin.H{"expenses_by_category": expenses})
+}

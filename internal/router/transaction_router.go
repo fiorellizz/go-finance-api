@@ -15,5 +15,7 @@ func SetupTransactionRoutes(r *gin.Engine, th *handler.TransactionHandler) {
 		api.GET("/users/:id/transactions", th.ListByUser)
 		api.PUT("/transactions/:id", th.Update)
 		api.DELETE("/transactions/:id", th.Delete)
+		api.GET("/reports/balance", th.GetBalance)
+    	api.GET("/reports/expenses-by-category", th.GetExpensesByCategory)
 	}
 }

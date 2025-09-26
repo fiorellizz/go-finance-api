@@ -35,3 +35,11 @@ func (s *TransactionService) Update(id string, tx *domain.Transaction) error {
 func (s *TransactionService) Delete(id string) error {
     return s.repo.Delete(id)
 }
+
+func (s *TransactionService) GetBalance(userID uint) (float64, error) {
+    return s.repo.GetBalance(userID)
+}
+
+func (s *TransactionService) GetExpensesByCategory(userID uint) (map[string]float64, error) {
+    return s.repo.GetExpensesByCategory(userID)
+}

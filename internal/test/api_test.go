@@ -21,8 +21,8 @@ func TestAPI(t *testing.T) {
 	t.Run("List Transactions", testListTransactions)
 	t.Run("Update Transaction", testUpdateTransaction)
 	t.Run("Delete Transaction", testDeleteTransaction)
-	// t.Run("Get Balance Report", testGetBalance)
-	// t.Run("Get Expenses by Category", testGetExpensesByCategory)
+	t.Run("Get Balance Report", testGetBalance)
+	t.Run("Get Expenses by Category", testGetExpensesByCategory)
 }
 
 func testRegister(t *testing.T) {
@@ -126,24 +126,24 @@ func testDeleteTransaction(t *testing.T) {
 	}
 }
 
-// func testGetBalance(t *testing.T) {
-// 	resp, err := authRequest("GET", baseURL+"/reports/balance", nil)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	defer resp.Body.Close()
-// 	if resp.StatusCode != http.StatusOK {
-// 		t.Errorf("expected 200, got %d", resp.StatusCode)
-// 	}
-// }
+func testGetBalance(t *testing.T) {
+	resp, err := authRequest("GET", baseURL+"/reports/balance", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("expected 200, got %d", resp.StatusCode)
+	}
+}
 
-// func testGetExpensesByCategory(t *testing.T) {
-// 	resp, err := authRequest("GET", baseURL+"/reports/expenses-by-category", nil)
-// 	if err != nil {
-// 		t.Fatal(err)
-// 	}
-// 	defer resp.Body.Close()
-// 	if resp.StatusCode != http.StatusOK {
-// 		t.Errorf("expected 200, got %d", resp.StatusCode)
-// 	}
-// }
+func testGetExpensesByCategory(t *testing.T) {
+ 	resp, err := authRequest("GET", baseURL+"/reports/expenses-by-category", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		t.Errorf("expected 200, got %d", resp.StatusCode)
+ 	}
+}

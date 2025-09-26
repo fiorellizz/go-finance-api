@@ -41,3 +41,40 @@ func (r *TransactionRepository) Update(id string, tx *domain.Transaction) error 
 func (r *TransactionRepository) Delete(id string) error {
     return r.db.Delete(&domain.Transaction{}, id).Error
 }
+
+// GetBalance - soma de receitas e despesas de um usuário
+func (r *TransactionRepository) GetBalance(userID uint) (float64, error) {
+    var income, expense float64
+    if err := r.db.Model(&domain.Transaction{}).
+        Where("user_id = ? AND type = ?", userID, "income").
+        Select("COALESCE(SUM(amount),0)").Scan(&income).Error; err != nil {
+        return 0, err
+    }
+    if err := r.db.Model(&domain.Transaction{}).
+        Where("user_id = ? AND type = ?", userID, "expense").
+        Select("COALESCE(SUM(amount),0)").Scan(&expense).Error; err != nil {
+        return 0, err
+    }
+    return income - expense, nil
+}
+
+// GetExpensesByCategory - soma despesas agrupadas por categoria
+func (r *TransactionRepository) GetExpensesByCategory(userID uint) (map[string]float64, error) {
+    results := make(map[string]float64)
+    rows, err := r.db.Model(&domain.Transaction{}).
+        Select("category, COALESCE(SUM(amount),0) as total").
+        Where("user_id = ? AND type = ?", userID, "expense").
+        Group("category").Rows()
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var category string
+    var total float64
+    for rows.Next() {
+        rows.Scan(&category, &total)
+        results[category] = total
+    }
+    return results, nil
+}
