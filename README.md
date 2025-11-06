@@ -80,7 +80,7 @@ migrations/             # Scripts SQL de criação e rollback
 
 6. Teste a API:
    ```bash
-   go test ./internal/test -run TestAPI
+   go test ./internal/test -v
    ```
 
 ## Rotas Disponíveis
