@@ -16,7 +16,7 @@ import (
 	"gorm.io/gorm"
 
 	"github.com/fiorellizz/go-finance-api/internal/app"
-	"github.com/fiorellizz/go-finance-api/internal/domain"
+	// "github.com/fiorellizz/go-finance-api/internal/domain"
 	"github.com/fiorellizz/go-finance-api/internal/router"
 )
 
@@ -29,7 +29,7 @@ func main() {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASS"),
+		os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"),
 		os.Getenv("DB_PORT"),
 	)
@@ -40,7 +40,7 @@ func main() {
 	}
 
 	// AutoMigrate (somente em dev)
-	db.AutoMigrate(&domain.User{}, &domain.Transaction{})
+	// db.AutoMigrate(&domain.User{}, &domain.Transaction{})
 
 	// Inicializa a aplicação (DI centralizado || injeção de dependecia)
 	application := app.New(db)

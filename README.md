@@ -2,7 +2,7 @@
 
 Uma API RESTful para controle financeiro pessoal, desenvolvida em **Go (Golang)**, com autenticação JWT, organização em camadas e testes automatizados.
 
-## 🚀 Funcionalidades
+## Funcionalidades
 
 - Registro e autenticação de usuários (JWT).
 - CRUD completo de transações financeiras (entradas e saídas).
@@ -17,7 +17,7 @@ Uma API RESTful para controle financeiro pessoal, desenvolvida em **Go (Golang)*
   - `router` → configuração das rotas
   - `middleware` → autenticação e segurança
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 cmd/api/
@@ -36,7 +36,7 @@ internal/
 migrations/             # Scripts SQL de criação e rollback
 ```
 
-## 🛠 Tecnologias Utilizadas
+## Tecnologias Utilizadas
 
 - [Go](https://go.dev/) (Golang)
 - [Gin](https://github.com/gin-gonic/gin) (framework web)
@@ -44,7 +44,7 @@ migrations/             # Scripts SQL de criação e rollback
 - PostgreSQL
 - JWT (JSON Web Token) para autenticação
 
-## ▶️ Como Rodar o Projeto
+## Como Rodar o Projeto
 
 1. Clone o repositório:
    ```bash
@@ -56,23 +56,34 @@ migrations/             # Scripts SQL de criação e rollback
    ```env
    DB_HOST=localhost
    DB_PORT=5432
-   DB_USER=postgres
-   DB_PASSWORD=postgres
-   DB_NAME=finance
+   DB_USER=postgres (Seu usuario)
+   DB_PASSWORD=SqlSenha1 (Senha do seu usuario)
+   DB_NAME=go_finance
    JWT_SECRET=seuSegredoAqui
+   PORT=8080
    ```
 
-3. Rode as migrações:
+3. Crie o Database:
+   ```bash
+   sudo -u postgres psql -c "CREATE DATABASE go_finance OWNER postgres;"
+   ```
+
+4. Aplique as migrações:
+   ```bash
+   sudo -u postgres psql -d go_finance -f migrations/20250922182505_init_schema.up.sql
+   ```
+
+5. Rode as migrações:
    ```bash
    go run cmd/api/main.go
    ```
 
-4. Teste a API:
+6. Teste a API:
    ```bash
    go test ./internal/test -run TestAPI
    ```
 
-## ✅ Rotas Disponíveis
+## Rotas Disponíveis
 
 - `POST /api/register` → Registrar usuário
 - `POST /api/login` → Login e gerar token JWT
@@ -84,7 +95,7 @@ migrations/             # Scripts SQL de criação e rollback
 - `GET /api/reports/balance` → Relatório de saldo
 - `GET /api/reports/expenses-by-category` → Relatório de despesas por categoria
 
-## 🧪 Testes Automatizados
+## Testes Automatizados
 
 O projeto possui testes de ponta a ponta em `internal/test/api_test.go`, cobrindo:
 
@@ -96,3 +107,5 @@ Rodar os testes:
 ```bash
 go test ./internal/test -v
 ```
+
+- OBS: Para realizar os testes o servidor da aplicação deve está rodando
